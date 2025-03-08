@@ -6,7 +6,7 @@ There are two main issues:
 - Errors are swallowed up and not displayed to the user. You just get a generic "Blender could not convert the .blend file to FBX file" message, which doesn't tell you anything about why the export failed.
 - You can't customise the export process at all.
 
-This project fixes both of these issues. When something goes wrong on import, we show the error in a console window:
+This project fixes both of these issues. When something goes wrong on import, we show the error in the unity console:
 
 ![](example_error.jpg)
 

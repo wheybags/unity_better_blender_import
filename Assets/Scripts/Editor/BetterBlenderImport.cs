@@ -10,6 +10,8 @@ public class BetterBlenderImport
 {
     static BetterBlenderImport()
     {
+        EditorApplication.update += forwardErrorMessages;
+
         // If you need to attach a debugger, uncomment this to run from update instead
         // of running directly from this static constructor. For normal use though,
         // running directly is needed, as it ensures we run before mesh importing.
@@ -24,6 +26,30 @@ public class BetterBlenderImport
         doPatchIfNeeded();
     }
 
+    static void forwardErrorMessages()
+    {
+        string errorsDirectory = Path.GetDirectoryName(Application.dataPath) + "/blender_to_fbx_errors";
+
+        string[] files = null;
+        try
+        {
+            files = Directory.GetFiles(errorsDirectory);
+        }
+        catch (Exception)
+        {
+            return;
+        }
+
+        foreach (string errorPath in files)
+        {
+            try
+            {
+                Debug.LogError(File.ReadAllText(errorPath));
+                File.Delete(errorPath);
+            }
+            catch (Exception) {}
+        }
+    }
 
     static void doPatchIfNeeded()
     {
@@ -107,6 +133,7 @@ import importlib.util
 import sys
 import traceback
 import shutil
+import uuid
 
 def import_by_path(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -134,25 +161,17 @@ try:
 except Exception as e:
     tb = traceback.format_exc()
 
-    temp_folder = 'C:/UnityBetterBlenderImportTemp'
-    os.makedirs(temp_folder, exist_ok=True)
-
+    filename = '(unknown)'
     try:
-        err_path = os.path.join(temp_folder, ""blender_to_fbx_error.txt"")
+        filename = sys.argv[sys.argv.index('-b') + 1]
+    except:
+        pass
 
-        filename = '(unknown)'
-        try:
-            filename = sys.argv[sys.argv.index('-b') + 1]
-        except:
-            pass
-
-        with open(err_path, ""w"") as f:
-            f.write('error importing file: ' + filename + '\n\n' + tb)
-
-        # lol, the amount of quoting required here is ridonculous
-        os.system('start /wait cmd.exe /c ""type """"""' + err_path + '"""""" && pause""')
-    finally:
-        shutil.rmtree(temp_folder)
+    errors_directory = os.path.join(project_path, 'blender_to_fbx_errors')
+    os.makedirs(errors_directory, exist_ok=True)
+    err_path = os.path.join(errors_directory, str(uuid.uuid4()) + '.txt')
+    with open(err_path, 'w') as f:
+        f.write('error importing file: ' + filename + '\n\n' + tb)
 
     raise e
 ".Replace("\r\n", "\n");
