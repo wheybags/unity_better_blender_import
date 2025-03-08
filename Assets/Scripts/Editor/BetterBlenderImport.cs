@@ -46,7 +46,7 @@ public class BetterBlenderImport
         {
             Debug.Log("BetterBlenderImport: applying patch to " + blenderFbxPath);
 
-            string tempFolder = (Path.GetDirectoryName(Application.dataPath) + "/BetterBlenderImportTemp").Replace("/", "\\");
+            string tempFolder = "C:\\UnityBetterBlenderImportTemp";
             Directory.CreateDirectory(tempFolder);
 
             try
@@ -106,6 +106,7 @@ import os
 import importlib.util
 import sys
 import traceback
+import shutil
 
 def import_by_path(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -132,9 +133,13 @@ try:
 
 except Exception as e:
     tb = traceback.format_exc()
-    err_path = os.path.join(project_path, ""blender_to_fbx_error.txt"")
+
+    temp_folder = 'C:/UnityBetterBlenderImportTemp'
+    os.makedirs(temp_folder, exist_ok=True)
 
     try:
+        err_path = os.path.join(temp_folder, ""blender_to_fbx_error.txt"")
+
         filename = '(unknown)'
         try:
             filename = sys.argv[sys.argv.index('-b') + 1]
@@ -147,7 +152,7 @@ except Exception as e:
         # lol, the amount of quoting required here is ridonculous
         os.system('start /wait cmd.exe /c ""type """"""' + err_path + '"""""" && pause""')
     finally:
-        os.remove(err_path)
+        shutil.rmtree(temp_folder)
 
     raise e
 ".Replace("\r\n", "\n");
