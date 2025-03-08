@@ -144,36 +144,34 @@ def import_by_path(name, path):
 
 project_path = os.getcwd()
 
-try:
-    in_project_path = os.path.join(project_path, ""Assets"", ""Scripts"", ""Editor"", ""Unity-BlenderToFBX-override.py"")
-    orig_path = os.path.join(os.path.dirname(__file__), ""Unity-BlenderToFBX-orig.py"")
+in_project_path = os.path.join(project_path, ""Assets"", ""Scripts"", ""Editor"", ""Unity-BlenderToFBX-override.py"")
+orig_path = os.path.join(os.path.dirname(__file__), ""Unity-BlenderToFBX-orig.py"")
 
-    if os.path.exists(in_project_path):
-        path = in_project_path
-    else:
-        path = orig_path
-
-    temp = sys.dont_write_bytecode
-    sys.dont_write_bytecode = True
-    import_by_path(""unity_blender_to_fbx"", path)
-    sys.dont_write_bytecode = temp
-
-except Exception as e:
-    tb = traceback.format_exc()
-
-    filename = '(unknown)'
+if not os.path.exists(in_project_path):
+    import_by_path(""unity_blender_to_fbx"", orig_path)
+else:
     try:
-        filename = sys.argv[sys.argv.index('-b') + 1]
-    except:
-        pass
+        temp = sys.dont_write_bytecode
+        sys.dont_write_bytecode = True
+        import_by_path(""unity_blender_to_fbx"", in_project_path)
+        sys.dont_write_bytecode = temp
 
-    errors_directory = os.path.join(project_path, 'blender_to_fbx_errors')
-    os.makedirs(errors_directory, exist_ok=True)
-    err_path = os.path.join(errors_directory, str(uuid.uuid4()) + '.txt')
-    with open(err_path, 'w') as f:
-        f.write('error importing file: ' + filename + '\n\n' + tb)
+    except Exception as e:
+        tb = traceback.format_exc()
 
-    raise e
+        filename = '(unknown)'
+        try:
+            filename = sys.argv[sys.argv.index('-b') + 1]
+        except:
+            pass
+
+        errors_directory = os.path.join(project_path, 'blender_to_fbx_errors')
+        os.makedirs(errors_directory, exist_ok=True)
+        err_path = os.path.join(errors_directory, str(uuid.uuid4()) + '.txt')
+        with open(err_path, 'w') as f:
+            f.write('error importing file: ' + filename + '\n\n' + tb)
+
+        raise e
 ".Replace("\r\n", "\n");
 
     private static readonly string originalSource = @"import bpy
