@@ -6,8 +6,8 @@ import sys
 # for handling ancient blender versions, to make it easier to understand
 # what's actually happening.
 #
-# If this file throws exceptions at all, they will be shown in a console
-# window. print()s will unfortunately not show up in the unity console,
+# If this file throws exceptions at all, they will be shown in the unity
+# console. print()s will unfortunately not show up in the unity console,
 # so if you need to debug something, you can either write text to a file,
 # or just run this code directly in the blender python console.
 
