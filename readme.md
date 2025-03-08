@@ -8,7 +8,7 @@ There are two main issues:
 
 This project fixes both of these issues. When something goes wrong on import, we show the error in a console window:
 
-IMAGE HERE
+![](example_error.jpg)
 
 As for customisation, you can write whatever custom code you want [here](Assets/Scripts/Editor/Unity-BlenderToFBX-override.py). Your customisations are per-project, and will not affect other projects running on your machine at all.
 
